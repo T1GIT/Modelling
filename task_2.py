@@ -6,32 +6,19 @@ m = 5
 _m = 1
 n = 14
 
-LENGTH = m + n + 1
 
-# Init
-P = np.zeros((LENGTH, LENGTH))
+size = m + n + 1
+P = np.zeros((size, size))
 for i in range(0, m + n):
     P[i][i + 1] = lam
     P[i + 1][i] = (i + 1) * _m if i <= m else m * _m
-print("Матрица интенсивностей")
-print(P)
 
 # A
-d = []
-for i in P:
-    d.append(i.sum())
-D = np.diag(d)
-M = P.T - D
-M_ = M.copy()
-M_[-1] = np.array([1] * len(D[0]))
-B = np.array([np.array([0])] * len(P))
-B[-1][0] = 1
-X = np.array(list(map(lambda x: x[0], np.linalg.inv(M_) @ B)))
-print("Установившиеся вероятности")
-print(X)
-print("Сумма вероятностей: ", X.sum())
-
-print(" Характеристики:")
+size = len(P)
+M = P.T - P.sum(0)
+M[-1].fill(1)
+B = np.array([[0]] * (size - 1) + [[1]])
+X = np.linalg.inv(M) @ B
 
 # B
 print("P отказа:", X[-1])
@@ -58,7 +45,7 @@ s0 = 0
 for i in range(1, m + 1):
     s0 += i * X[i]
 s1 = 0
-for i in range(m + 1, LENGTH):
+for i in range(m + 1, size):
     s1 += m * X[i]
 print("Среднее количество занятых каналов:", s0 + s1)
 

@@ -35,7 +35,7 @@ def print_mx(array: np.ndarray):
 
 
 SIZE = 5
-TEST = np.array([[rnd.uniform(0, 1) for _ in range(SIZE)] for _ in range(SIZE)])
+TEST = np.array([[rnd.uniform(0, .2) for _ in range(SIZE)] for _ in range(SIZE)])
 print_mx(TEST)
 
 
@@ -70,66 +70,40 @@ def f_3_1(p: np.ndarray, k: int) -> np.ndarray:
     return res
 
 
-def f_3_2(p: np.ndarray, rounded: bool = True, accuracy: int = 10) -> np.ndarray:
+def f_3_2(p: np.ndarray, accuracy: int = 10) -> np.ndarray:
     res = np.zeros(p.shape)
     for t in range(1, accuracy + 1):
         res += t * f_3(p, t)
-    if rounded:
-        size = len(p)
-        for i in range(size):
-            for j in range(size):
-                res[i][j] = math.ceil(res[i][j])
     return res
 
 
 def f_4(p: np.ndarray, k: int) -> np.ndarray:
-    f = p
     if k > 1:
-        p_inv_cache = np.linalg.inv(p)
-        f_1_cache = p
-        f_1_desc_cache = f_1(p, k)
+        f = p + f_1(p, k)
         for m in range(1, k):
-            f_1_cache = f_1_cache @ p
-            f_1_desc_cache = f_1_desc_cache @ p_inv_cache
-            f = f_1_cache - f * f_1_desc_cache
-    return f
+            f -= f_4(p, m) * f_1(p, k - m)
+        return f
+    else:
+        return p
 
 
-def f_4_1(p: np.ndarray, rounded: bool = True, accuracy: int = 40):
+def f_4_1(p: np.ndarray, accuracy: int = 20):
     res = np.zeros(p.shape)
-    f = p
-    p_inv_ = np.linalg.inv(p)
-    p_ = p
-    p_desc_ = f_1(p, accuracy)
     for t in range(1, accuracy + 1):
-        res += t * f
-        p_ = p_ @ p
-        p_desc_ = p_desc_ @ p_inv_
-        f = p_ - f * p_desc_
-    if rounded:
-        size = len(p)
-        for i in range(size):
-            for j in range(size):
-                res[i][j] = math.ceil(res[i][j])
+        res += t * f_4(p, t)
     return res
 
 
 def f_4_2(p: np.ndarray, k: int) -> np.ndarray:
     res = np.zeros(p.shape)
-    f = p
-    p_inv_cache = np.linalg.inv(p)
-    f_1_cache = p
-    f_1_desc_cache = f_1(p, k)
     for t in range(1, k + 1):
-        res += f
-        f_1_cache = f_1_cache @ p
-        f_1_desc_cache = f_1_desc_cache @ p_inv_cache
-        f = f_1_cache - f * f_1_desc_cache
+        res += f_4(p, t)
     return res
 
 
-print_mx(f_4(P, 5))
-print_mx(f_4_1(P))
-# print_mx(f_4_2(P, 2))
-
-
+def f_5(p: np.ndarray):
+    size = len(p)
+    m_ = p.T - np.eye(size)
+    m_[-1].fill(1)
+    b = np.array([[0]] * (size - 1) + [[1]])
+    return np.linalg.inv(m_) @ b
