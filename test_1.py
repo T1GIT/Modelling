@@ -27,32 +27,32 @@ P = np.array([
 A = np.array([0.12, 0.05, 0.11, 0.07, 0.01, 0.01, 0.11, 0.11, 0.03, 0.13, 0.08, 0.03, 0.01, 0.1, 0.03])
 # Ответы
 print("     ЗАДАЧА 1")
-print(task_1.f_1(P, 7)[11][0])
+print(task_1.transfer(P, 7)[11][0])
 
 print("     ЗАДАЧА 2")
-res = task_1.f_2(P, A, 7)
+res = task_1.state(P, A, 7)
 print(", ".join(map(lambda x: str(round(x, 4)), res)))
 
 print("     ЗАДАЧА 3")
-print(task_1.f_3(P, 10)[1][5])
+print(task_1.on_step(task_1.first_transfer_gen(P), 10)[1][5])
 
 print("     ЗАДАЧА 4")
-print(task_1.f_3_1(P, 10)[9][11])
+print(task_1.not_later(task_1.first_transfer_gen(P), 10)[9][11])
 
 print("     ЗАДАЧА 5")
-res = task_1.f_3_2(P)[14][12]
+res = task_1.avg(task_1.transfer_gen(P))[14][12]
 print(math.ceil(res))
 
 print("     ЗАДАЧА 6")
-print(task_1.f_4(P, 8)[3][3])
+print(task_1.on_step(task_1.first_transfer_gen(P), 8)[3][3])
 
 print("     ЗАДАЧА 7")
-print(task_1.f_4_1(P, 8)[10][10])
+print(task_1.not_later(task_1.first_transfer_gen(P), 8)[10][10])
 
 print("     ЗАДАЧА 8")
-res = task_1.f_4_2(P)[11][11]
+res = task_1.avg(task_1.first_return_gen(P))[11][11]
 print(math.ceil(res))
 
 print("     ЗАДАЧА 9")
-res = task_1.f_5(P)
+res = task_1.last_state(P)
 print(", ".join(map(lambda x: str(round(x[0], 4)), res)))
