@@ -26,10 +26,14 @@ def profile_wrapper(func):
 
 def print_mx(array: np.ndarray):
     NUM = 3
-    for row in array:
-        for cell in row:
+    if type(array[0]) is np.ndarray:
+        for row in array:
+            for cell in row:
+                print(f"{str(round(cell, NUM)):<8}", end="")
+            print()
+    else:
+        for cell in array:
             print(f"{str(round(cell, NUM)):<8}", end="")
-        print()
     print()
 
 
@@ -73,14 +77,13 @@ def first_transfer_gen(p: np.ndarray) -> Generator[np.ndarray, None, None]:
 
 def first_return_gen(p: np.ndarray) -> Generator[np.ndarray, None, None]:
     p_gen = transfer_gen(p)
-    res = next(p_gen).copy()
+    res = next(p_gen).diagonal()
     yield res
-    eye = np.eye(len(res))
-    p_list = [p]
-    f_list = [p]
+    p_list = [res]
+    f_list = [res]
     while True:
-        next_p = next(p_gen)
-        res = (next_p - sum(map(lambda _f, _p: _f * _p, f_list, p_list))) * eye
+        next_p = next(p_gen).diagonal()
+        res = next_p - sum(map(lambda _f, _p: _f * _p, f_list, p_list))
         f_list.append(res)
         p_list.insert(0, next_p)
         yield res
@@ -112,6 +115,3 @@ def last_state(p: np.ndarray):
     m_[-1].fill(1)
     b = np.array([[0]] * (size - 1) + [[1]])
     return np.linalg.inv(m_) @ b
-
-
-avg(first_transfer_gen(TEST))

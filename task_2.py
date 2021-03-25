@@ -7,21 +7,21 @@ _m = 1
 n = 14
 
 
-def f_1(lam: int, m: int, _m: int, n: int):
+def transfer(lam: int, m: int, _m: int, n: int):
     size = m + n + 1
-    p = np.zeros((size, size))
+    P = np.zeros((size, size))
     for i in range(0, m + n):
-        p[i][i + 1] = lam
-        p[i + 1][i] = (i + 1) * _m if i <= m else m * _m
-    return p
+        P[i][i + 1] = lam
+        P[i + 1][i] = (i + 1) * _m if i <= m else m * _m
+    return P
 
 
-def f_2(p: np.ndarray):
+def last_state(p: np.ndarray):
     size = len(p)
-    m = p.T - p.sum(0)
-    m[-1].fill(1)
-    b = np.array([[0]] * (size - 1) + [[1]])
-    return np.linalg.inv(m) @ b
+    M = p.T - p.sum(0)
+    M[-1].fill(1)
+    B = np.array([[0]] * (size - 1) + [[1]])
+    return np.linalg.inv(M) @ B
 
 
 # X = f_2(f_1(lam, m, _m, n))

@@ -25,7 +25,7 @@ P = np.array([
     [0,     0,      0,      0,      0,      0,      0,      0,      0,      0,      0.16,   0,      0,      0.75,   0.09],  # 15
 ])
 A = np.array([0.12, 0.05, 0.11, 0.07, 0.01, 0.01, 0.11, 0.11, 0.03, 0.13, 0.08, 0.03, 0.01, 0.1, 0.03])
-# Ответы
+# Решение
 print("     ЗАДАЧА 1")
 print(task_1.transfer(P, 7)[11][0])
 
@@ -40,18 +40,17 @@ print("     ЗАДАЧА 4")
 print(task_1.not_later(task_1.first_transfer_gen(P), 10)[9][11])
 
 print("     ЗАДАЧА 5")
-res = task_1.avg(task_1.transfer_gen(P))[14][12]
-task_1.print_mx(task_1.avg(task_1.transfer_gen(P)))
+res = task_1.avg(task_1.first_transfer_gen(P))[14][12]
 print(math.ceil(res))
 
 print("     ЗАДАЧА 6")
-print(task_1.on_step(task_1.first_transfer_gen(P), 8)[3][3])
+print(task_1.on_step(task_1.first_return_gen(P), 8)[3])
 
 print("     ЗАДАЧА 7")
-print(task_1.not_later(task_1.first_transfer_gen(P), 8)[10][10])
+print(task_1.not_later(task_1.first_return_gen(P), 8)[10])
 
 print("     ЗАДАЧА 8")
-res = task_1.avg(task_1.first_return_gen(P))[11][11]
+res = task_1.avg(task_1.first_return_gen(P))[11]
 print(math.ceil(res))
 
 print("     ЗАДАЧА 9")
