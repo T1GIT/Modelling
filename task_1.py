@@ -1,11 +1,27 @@
 import sys
-from datetime import time
-from time import time_ns
+from datetime import time, datetime
+from time import time_ns, time
 from typing import Generator
 
 import numpy as np
 import math
 import random as rnd
+
+
+def profile_wrapper(func):
+    def wrap(*args, **kwargs):
+        t = time_ns()
+        res = func(*args, **kwargs)
+        length = time_ns() - t
+        if length > 1e9:
+            len_str = f"{length / 1e9:4.2f} s"
+        elif length > 1e3:
+            len_str = f"{length / 1e6:4.2f} ms"
+        else:
+            len_str = f"{length} ns"
+        print(f"{func.__name__:>10}: {len_str}")
+        return res
+    return wrap
 
 
 def print_mx(array: np.ndarray):
@@ -17,7 +33,7 @@ def print_mx(array: np.ndarray):
     print()
 
 
-SIZE = 100
+SIZE = 15
 TEST = np.array([[rnd.uniform(0, .2) for _ in range(SIZE)] for _ in range(SIZE)])
 TEST_VECTOR = np.array([[rnd.uniform(0, .2)] for _ in range(SIZE)])
 
@@ -82,7 +98,8 @@ def not_later(gen: Generator[np.ndarray, None, None], k: int):
     return res
 
 
-def avg(gen: Generator[np.ndarray, None, None], accuracy: int = 1000):
+@profile_wrapper
+def avg(gen: Generator[np.ndarray, None, None], accuracy: int = 10000):
     res = next(gen).copy()
     for t in range(2, accuracy + 1):
         res += t * next(gen)
@@ -97,25 +114,4 @@ def last_state(p: np.ndarray):
     return np.linalg.inv(m_) @ b
 
 
-P = np.array([
-#   1       2       3       4       5       6       7       8       9       10      11      12      13      14      15
-    [0.07,  0.44,   0,      0,      0.49,   0,      0,      0,      0,      0,      0,      0,      0,      0,      0   ],  # 1
-    [0,     0.14,   0,      0,      0.12,   0.74,   0,      0,      0,      0,      0,      0,      0,      0,      0   ],  # 2
-    [0,     0.38,   0.16,   0,      0,      0.46,   0,      0,      0,      0,      0,      0,      0,      0,      0   ],  # 3
-    [0,     0,      0.17,   0.17,   0.27,   0.23,   0.16,   0,      0,      0,      0,      0,      0,      0,      0   ],  # 4
-    [0.19,  0,      0,      0.38,   0.13,   0.09,   0,      0,      0,      0,      0.21,   0,      0,      0,      0   ],  # 5
-    [0,     0.23,   0.11,   0,      0,      0.21,   0.3,    0,      0,      0.03,   0.12,   0,      0,      0,      0   ],  # 6
-    [0,     0.42,   0,      0.18,   0,      0.32,   0.08,   0,      0,      0,      0,      0,      0,      0,      0   ],  # 7
-    [0,     0,      0,      0,      0.36,   0,      0,      0.33,   0,      0,      0,      0,      0,      0,      0.31],  # 8
-    [0,     0,      0,      0,      0.09,   0.12,   0.29,   0.16,   0.19,   0.02,   0,      0,      0,      0.04,   0.09],  # 9
-    [0,     0,      0,      0,      0,      0,      0,      0,      0,      0.1,    0,      0.01,   0.38,   0.21,   0.3 ],  # 10
-    [0,     0,      0,      0,      0.23,   0,      0.2,    0,      0,      0,      0.06,   0.23,   0,      0.09,   0.19],  # 11
-    [0,     0,      0,      0,      0,      0,      0,      0.51,   0.42,   0,      0,      0.07,   0,      0,      0   ],  # 12
-    [0,     0,      0,      0,      0,      0,      0,      0,      0.04,   0,      0.35,   0.21,   0.4,    0,      0   ],  # 13
-    [0,     0,      0,      0,      0,      0,      0,      0.28,   0.32,   0.11,   0,      0,      0.25,   0.04,   0   ],  # 14
-    [0,     0,      0,      0,      0,      0,      0,      0,      0,      0,      0.16,   0,      0,      0.75,   0.09],  # 15
-])
-
-tns = time_ns()
-print_mx(avg(first_return_gen(P)))
-print((time_ns() - tns) / 1e9)
+avg(first_transfer_gen(TEST))

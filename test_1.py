@@ -41,6 +41,7 @@ print(task_1.not_later(task_1.first_transfer_gen(P), 10)[9][11])
 
 print("     ЗАДАЧА 5")
 res = task_1.avg(task_1.transfer_gen(P))[14][12]
+task_1.print_mx(task_1.avg(task_1.transfer_gen(P)))
 print(math.ceil(res))
 
 print("     ЗАДАЧА 6")
