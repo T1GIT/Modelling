@@ -44,7 +44,7 @@ print(sum(map(lambda i:
               range(m + 1, m + n + 1))))
 
 print("     ЗАДАЧА G")
-print(sum(X[0: m]))
+print(sum(X[1: m + 1]))
 
 print("     ЗАДАЧА H")
 res = list(map(lambda x:
