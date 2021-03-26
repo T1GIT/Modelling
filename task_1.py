@@ -24,16 +24,15 @@ def profile_wrapper(func):
     return wrap
 
 
-def print_mx(array: np.ndarray):
-    NUM = 3
+def print_mx(array: np.ndarray, accuracy: int = 5):
     if type(array[0]) is np.ndarray:
         for row in array:
             for cell in row:
-                print(f"{str(round(cell, NUM)):<8}", end="")
+                print(f"{str(round(cell, accuracy)):<{5 + accuracy}}", end="")
             print()
     else:
         for cell in array:
-            print(f"{str(round(cell, NUM)):<8}", end="")
+            print(f"{str(round(cell, accuracy)):<{5 + accuracy}}", end="")
     print()
 
 
@@ -114,4 +113,4 @@ def last_state(p: np.ndarray):
     m_ = p.T - np.eye(size)
     m_[-1].fill(1)
     b = np.array([[0]] * (size - 1) + [[1]])
-    return (np.linalg.inv(m_) @ b).T[0]
+    return (np.linalg.inv(m_) @ b)[:, 0]

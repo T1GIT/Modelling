@@ -39,8 +39,7 @@ print("     ЗАДАЧА 4")
 print(task_1.not_later(task_1.first_transfer_gen(P), 10)[9][11])
 
 print("     ЗАДАЧА 5")
-res = task_1.avg(task_1.first_transfer_gen(P))[14][12]
-print(math.ceil(res))
+print(task_1.avg(task_1.first_transfer_gen(P))[14][12])
 
 print("     ЗАДАЧА 6")
 print(task_1.on_step(task_1.first_return_gen(P), 8)[3])
@@ -49,8 +48,7 @@ print("     ЗАДАЧА 7")
 print(task_1.not_later(task_1.first_return_gen(P), 8)[10])
 
 print("     ЗАДАЧА 8")
-res = task_1.avg(task_1.first_return_gen(P))[11]
-print(math.ceil(res))
+print(task_1.avg(task_1.first_return_gen(P))[11])
 
 print("     ЗАДАЧА 9")
 task_1.print_mx(task_1.last_state(P))

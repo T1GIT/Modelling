@@ -12,7 +12,8 @@ n = 14
 
 # Решение
 print("     ЗАДАЧА A")
-A = task_2.transfer(lam, m, _m, n)
+A = task_2.intensity(lam, m, _m, n)
+task_1.print_mx(A)
 X = task_2.last_state(A)
 task_1.print_mx(X)
 
@@ -48,5 +49,5 @@ print(sum(X[0: m]))
 print("     ЗАДАЧА H")
 res = list(map(lambda x:
                1 / x,
-               A.sum(0)))
+               A.sum(1)))
 print(res[0])
