@@ -3,7 +3,7 @@ import math
 import task_1
 import task_2
 
-#       Задание 1
+#       Задание 2
 # Данные
 lam = 6
 m = 5
