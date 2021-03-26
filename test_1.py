@@ -30,8 +30,7 @@ print("     ЗАДАЧА 1")
 print(task_1.transfer(P, 7)[11][0])
 
 print("     ЗАДАЧА 2")
-res = task_1.state(P, A, 7)
-print(", ".join(map(lambda x: str(round(x, 4)), res)))
+task_1.print_mx(task_1.state(P, A, 7))
 
 print("     ЗАДАЧА 3")
 print(task_1.on_step(task_1.first_transfer_gen(P), 10)[1][5])
@@ -54,5 +53,4 @@ res = task_1.avg(task_1.first_return_gen(P))[11]
 print(math.ceil(res))
 
 print("     ЗАДАЧА 9")
-res = task_1.last_state(P)
-print(", ".join(map(lambda x: str(round(x[0], 4)), res)))
+task_1.print_mx(task_1.last_state(P))

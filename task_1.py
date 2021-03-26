@@ -114,4 +114,4 @@ def last_state(p: np.ndarray):
     m_ = p.T - np.eye(size)
     m_[-1].fill(1)
     b = np.array([[0]] * (size - 1) + [[1]])
-    return np.linalg.inv(m_) @ b
+    return (np.linalg.inv(m_) @ b).T[0]
