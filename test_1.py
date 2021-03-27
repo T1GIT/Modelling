@@ -4,8 +4,8 @@ import task_1
 import task_2
 
 
-#       Задание 1
-# Данные
+print("                 ЗАДАНИЕ 1")
+print("              ДАННЫЕ")
 P = np.array([
 #   1       2       3       4       5       6       7       8       9       10      11      12      13      14      15
     [0.07,  0.44,   0,      0,      0.49,   0,      0,      0,      0,      0,      0,      0,      0,      0,      0   ],  # 1
@@ -25,13 +25,18 @@ P = np.array([
     [0,     0,      0,      0,      0,      0,      0,      0,      0,      0,      0.16,   0,      0,      0.75,   0.09],  # 15
 ])
 A = np.array([0.12, 0.05, 0.11, 0.07, 0.01, 0.01, 0.11, 0.11, 0.03, 0.13, 0.08, 0.03, 0.01, 0.1, 0.03])
-# Решение
+print("     P")
+task_1.print_mx(P)
+print("     A")
+task_1.print_mx(A)
+
+print("         РЕШЕНИЕ")
 print("     ЗАДАЧА 1")
 print(task_1.transfer(P, 7)[11][0])
 
 print("     ЗАДАЧА 2")
 task_1.print_mx(task_1.state(P, A, 7))
-
+#
 print("     ЗАДАЧА 3")
 print(task_1.on_step(task_1.first_transfer_gen(P), 10)[1][5])
 
@@ -39,7 +44,7 @@ print("     ЗАДАЧА 4")
 print(task_1.not_later(task_1.first_transfer_gen(P), 10)[9][11])
 
 print("     ЗАДАЧА 5")
-print(task_1.avg(task_1.first_transfer_gen(P))[14][12])
+print(task_1.avg(task_1.first_transfer_gen(P), 50000)[14][12])
 
 print("     ЗАДАЧА 6")
 print(task_1.on_step(task_1.first_return_gen(P), 8)[3])
@@ -48,7 +53,7 @@ print("     ЗАДАЧА 7")
 print(task_1.not_later(task_1.first_return_gen(P), 8)[10])
 
 print("     ЗАДАЧА 8")
-print(task_1.avg(task_1.first_return_gen(P))[11])
+print(task_1.avg(task_1.first_return_gen(P), 10000)[11])
 
 print("     ЗАДАЧА 9")
 task_1.print_mx(task_1.last_state(P))

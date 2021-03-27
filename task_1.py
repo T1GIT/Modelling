@@ -1,11 +1,8 @@
-import sys
-from datetime import time, datetime
-from time import time_ns, time
+import random as rnd
+from time import time_ns
 from typing import Generator
 
 import numpy as np
-import math
-import random as rnd
 
 
 def profile_wrapper(func):
@@ -13,13 +10,13 @@ def profile_wrapper(func):
         t = time_ns()
         res = func(*args, **kwargs)
         length = time_ns() - t
-        if length > 1e9:
+        if length >= 1e9:
             len_str = f"{length / 1e9:4.2f} s"
-        elif length > 1e3:
+        elif length >= 1e3:
             len_str = f"{length / 1e6:4.2f} ms"
         else:
             len_str = f"{length} ns"
-        print(f"{func.__name__:>10}: {len_str}")
+        print(f"{func.__name__}: {len_str}")
         return res
     return wrap
 
@@ -58,19 +55,10 @@ def state(p: np.ndarray, a: np.ndarray, k: int) -> np.ndarray:
 
 
 def first_transfer_gen(p: np.ndarray) -> Generator[np.ndarray, None, None]:
-    size = len(p)
     res = p.copy()
     yield res
     while True:
-        p_cache = np.zeros(p.shape)
-        for i in range(size):
-            for j in range(size):
-                s = 0
-                for m in range(size):
-                    if m != j:
-                        s += p[i][m] * res[m][j]
-                p_cache[i][j] = s
-        res = p_cache
+        res = (p @ res) - (p * res.diagonal())
         yield res
 
 
@@ -83,8 +71,8 @@ def first_return_gen(p: np.ndarray) -> Generator[np.ndarray, None, None]:
     while True:
         next_p = next(p_gen).diagonal()
         res = next_p - sum(map(lambda _f, _p: _f * _p, f_list, p_list))
-        f_list.append(res)
         p_list.insert(0, next_p)
+        f_list.append(res)
         yield res
 
 
@@ -94,23 +82,21 @@ def on_step(gen: Generator[np.ndarray, None, None], k: int):
 
 
 def not_later(gen: Generator[np.ndarray, None, None], k: int):
-    res = next(gen).copy()
-    for t in range(1, k):
-        res += next(gen)
-    return res
+    return sum(map(lambda t:
+                   next(gen),
+                   range(k)))
 
 
 @profile_wrapper
 def avg(gen: Generator[np.ndarray, None, None], accuracy: int = 10000):
-    res = next(gen).copy()
-    for t in range(2, accuracy + 1):
-        res += t * next(gen)
-    return res
+    return sum(map(lambda t:
+                   t * next(gen),
+                   range(1, accuracy + 1)))
 
 
 def last_state(p: np.ndarray):
-    size = len(p)
-    m_ = p.T - np.eye(size)
+    m_ = p.T - np.eye(len(p))
     m_[-1].fill(1)
-    b = np.array([[0]] * (size - 1) + [[1]])
+    b = np.array([[0]] * (len(p) - 1) + [[1]])
     return (np.linalg.inv(m_) @ b)[:, 0]
+

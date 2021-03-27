@@ -32,7 +32,7 @@ print(sum(map(lambda i:
 print("     ЗАДАЧА E")
 print(sum(map(lambda i:
               (i + 1) / (m * _m) * X[m + i],
-              range(1, n + 1))))
+              range(0, n))))
 
 print("     ЗАДАЧА F")
 print(sum(map(lambda i:
@@ -44,7 +44,7 @@ print(sum(map(lambda i:
               range(m + 1, m + n + 1))))
 
 print("     ЗАДАЧА G")
-print(sum(X[1: m + 1]))
+print(sum(X[0: m]))
 
 print("     ЗАДАЧА H")
 res = list(map(lambda x:
