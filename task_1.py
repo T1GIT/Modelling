@@ -70,8 +70,8 @@ def first_return_gen(p: np.ndarray) -> Generator[np.ndarray, None, None]:
     f_list = [res]
     while True:
         next_p = next(p_gen).diagonal()
-        res = next_p - sum(map(lambda _f, _p: _f * _p, f_list, p_list))
-        p_list.insert(0, next_p)
+        res = next_p - sum(map(lambda _f, _p: _f * _p, f_list, reversed(p_list)))
+        p_list.append(next_p)
         f_list.append(res)
         yield res
 
